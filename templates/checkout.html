@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head><title>Checkout - Bug Free Cafe</title></head>
+<body>
+  <h1>Checkout</h1>
+  <ul>
+    {% for it in cart %}
+      <li>{{ it.item }} — {{ it.qty }} × ${{ "%.2f"|format(it.price) }} = ${{ "%.2f"|format(it.qty * it.price) }}</li>
+    {% endfor %}
+  </ul>
+  <p>Total: ${{ "%.2f"|format(total) }}</p>
+
+  <!-- Simple confirm order (no payment) -->
+  <form action="/order_success" method="POST">
+    <input type="hidden" name="paid" value="0">
+    <button type="submit">Confirm Order (No Payment)</button>
+  </form>
+
+  <hr>
+  <p>Or pay online</p>
+  <form id="payForm" action="/create_razorpay_order" method="POST">
+    <input type="hidden" name="amount" value="{{ total }}">
+    <button type="submit">Pay with Razorpay</button>
+  </form>
+</body>
+</html>
