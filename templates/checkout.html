@@ -17,10 +17,14 @@
   </form>
 
   <hr>
-  <p>Or pay online</p>
-  <form id="payForm" action="/create_razorpay_order" method="POST">
-    <input type="hidden" name="amount" value="{{ total }}">
-    <button type="submit">Pay with Razorpay</button>
-  </form>
+  <p>Scan the QR to pay:</p>
+<img src="{{ url_for('static', filename='images/qr_code.png') }}" alt="UPI QR Code" width="200">
+<p><b>UPI ID:</b> yourname@upi</p>
+
+<form action="/order_success" method="POST">
+  <input type="hidden" name="paid" value="1">
+  <button type="submit">I Have Paid</button>
+</form>
+
 </body>
 </html>

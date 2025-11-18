@@ -1,42 +1,38 @@
-<!doctype html>
-<html>
-<head><title>Cart - Bug Free Cafe</title></head>
-<body>
-  <h1>Your Cart</h1>
-  {% if cart %}
-  <form action="/update_cart" method="POST">
-    <table>
-      <tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th><th>Action</th></tr>
-      {% for it in cart %}
-      <tr>
-        <td>{{ it.item }}</td>
-        <td>${{ "%.2f"|format(it.price) }}</td>
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Your Cart</h2>
+
+{% if cart %}
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Item</th>
+        <th>Price ($)</th>
+        <th>Qty</th>
+        <th>Total</th>
+        <th>Action</th>
+    </tr>
+
+    {% for item in cart %}
+    <tr>
+        <td>{{ item.item }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.qty }}</td>
+        <td>{{ item.total }}</td>
         <td>
-          <form style="display:inline" action="/update_cart" method="POST">
-            <input type="hidden" name="action" value="update">
-            <input type="hidden" name="item" value="{{ it.item }}">
-            <input type="number" name="qty" value="{{ it.qty }}" min="1">
-            <button type="submit">Update</button>
-          </form>
+            <a href="{{ url_for('remove', index=loop.index0) }}" style="color:red;">Remove</a>
         </td>
-        <td>${{ "%.2f"|format(it.price * it.qty) }}</td>
-        <td>
-          <form action="/update_cart" method="POST">
-            <input type="hidden" name="action" value="remove">
-            <input type="hidden" name="item" value="{{ it.item }}">
-            <button type="submit">Remove</button>
-          </form>
-        </td>
-      </tr>
-      {% endfor %}
-    </table>
-    <p>Total: ${{ "%.2f"|format(total) }}</p>
-    <a href="/">Continue shopping</a>
-    <a href="/checkout">Proceed to Checkout</a>
-  </form>
-  {% else %}
-  <p>Your cart is empty.</p>
-  <a href="/">Go to Menu</a>
-  {% endif %}
-</body>
-</html>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Total Amount: ${{ total }}</h3>
+
+<a href="{{ url_for('checkout') }}" class="btn btn--primary">Proceed to Checkout</a><br><br>
+<a href="{{ url_for('clear_cart') }}" style="color:red;">Clear Cart</a>
+
+{% else %}
+<p>Your cart is empty!</p>
+{% endif %}
+
+{% endblock %}
